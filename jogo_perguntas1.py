@@ -20,7 +20,18 @@ def mostrar_pergunta():
     pergunta = perguntas[index]
     imagem_path = pergunta['imagem']
     img = Image.open(imagem_path)
-    img = img.resize((largura_imagem, altura_imagem), Image.ANTIALIAS)
+
+    try:
+        # Se a versão do Pillow for 8.0.0 ou superior
+        img = img.resize((largura_imagem, altura_imagem), resample=Image.ANTIALIAS)
+    except AttributeError:
+        # Se a versão do Pillow for anterior a 8.0.0
+        try:
+            img = img.resize((largura_imagem, altura_imagem), Image.ANTIALIAS)
+        except:
+            # Caso a exceção ocorra, tente com um método de redimensionamento padrão
+            img = img.resize((largura_imagem, altura_imagem))
+
     img = ImageTk.PhotoImage(img)
 
     canvas_imagem.create_image(0, 0, anchor="nw", image=img)
@@ -55,7 +66,7 @@ frame_perguntas.pack(side="right", fill="both", expand=True)
 # Definição das perguntas e respostas
 perguntas = [
     {
-        'imagem': 'imagem1.png',
+        'imagem': 'images/imagem1.png',
         'pergunta': "1) A 'Carta de Pero Vaz de Caminha', escrita em 1500, é considerada como um dos documentos fundadores da Terra Brasilis e reflete, em seu texto, valores gerais da cultura renascentista, dentre os quais se destaca: a visão do índio como pertencente ao universo não religioso, tendo em conta sua antropofagia; a informação sobre os preconceitos desenvolvidos pelo renascimento no que tange à impossibilidade de se formar nos trópicos uma civilização católica e moderna; a identificação do Novo Mundo como uma área de insucesso devido à elevada temperatura que nada deixaria produzir; a observação da natureza e do homem do Novo Mundo como resultado da experiência da nova visão de homem, característica do século XV; a consideração da natureza e do homem como inferiores ao que foi projetado por Deus na Gênese",
         'respostas': ['a) a visão do índio como pertencente ao universo não religioso, tendo em conta sua antropofagia;',
                       'b) a informação sobre os preconceitos desenvolvidos pelo renascimento no que tange à impossibilidade de se formar nos trópicos uma civilização católica e moderna;',
@@ -65,7 +76,7 @@ perguntas = [
         'resposta_correta': 3,
     },
     {
-        'imagem': 'imagem2.png',
+        'imagem': 'images/imagem2.png',
         'pergunta': "2) Enquanto os portugueses escutavam a missa com muito 'prazer e devoção', a praia encheu-se de nativos. Eles sentavam-se lá surpresos com a complexidade do ritual que observavam ao longe. Quando D. Henrique acabou a pregação, os indígenas se ergueram e começaram a soprar conchas e buzinas, saltando e dançando (…) Náufragos Degredados e Traficantes (Eduardo Bueno). Este contato amistoso entre brancos e índios era preservado:",
         'respostas': [
             'a) pela Igreja, que sempre respeitou a cultura indígena no decurso da catequese.',
@@ -76,7 +87,7 @@ perguntas = [
         'resposta_correta': 1,
     },
     {
-        'imagem': 'imagem3.png',
+        'imagem': 'images/imagem3.png',
         'pergunta': "2) Enquanto os portugueses escutavam a missa com muito 'prazer e devoção', a praia encheu-se de nativos. Eles sentavam-se lá surpresos com a complexidade do ritual que observavam ao longe. Quando D. Henrique acabou a pregação, os indígenas se ergueram e começaram a soprar conchas e buzinas, saltando e dançando (…) Náufragos Degredados e Traficantes (Eduardo Bueno). Este contato amistoso entre brancos e índios era preservado:",
         'respostas': [
             'a) pela Igreja, que sempre respeitou a cultura indígena no decurso da catequese.',
@@ -85,7 +96,7 @@ perguntas = [
             'd) em todos os períodos da História Colonial Brasileira, passando a figura do índio para o imaginário social como "o bom selvagem e forte colaborador da colonização".',
             'e) sobretudo pelo governo colonial, que tomou várias medidas para impedir o genocídio e a escravidão.'],
         'resposta_correta': 2,
-    },
+    }
 ]
 
 # Inicialização de variáveis
