@@ -7,6 +7,17 @@ def verificar_resposta(resposta_correta):
     resposta_selecionada = var_resposta.get()
     if resposta_selecionada == resposta_correta:
         avancar()
+    else:
+        exibir_mensagem_erro()
+
+# Função para exibir uma mensagem de erro
+def exibir_mensagem_erro():
+    feedback_label.config(text="Resposta incorreta. Tente novamente.", fg="red")
+    root.after(1000, limpar_mensagem_erro)
+
+# Função para limpar a mensagem de erro
+def limpar_mensagem_erro():
+    feedback_label.config(text="")
 
 # Função para avançar para a próxima pergunta
 def avancar():
@@ -119,6 +130,10 @@ for i, resposta in enumerate(perguntas[index]['respostas']):
     btn = tk.Radiobutton(frame_perguntas, text=resposta, variable=var_resposta, value=i, justify="left", anchor="w", wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue")
     btn.pack(anchor="w", padx=10, pady=5)
     botoes_resposta.append(btn)
+
+# Label para feedback
+feedback_label = tk.Label(frame_perguntas, text="", justify="left", anchor="w", wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue", fg="red")
+feedback_label.pack()
 
 # Botão para verificar a resposta
 btn_verificar = tk.Button(frame_perguntas, text="Verificar Resposta", command=lambda: verificar_resposta(perguntas[index]['resposta_correta']))
