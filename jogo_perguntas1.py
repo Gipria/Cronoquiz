@@ -117,7 +117,7 @@ var_resposta = tk.IntVar()
 botoes_resposta = []
 for i, resposta in enumerate(perguntas[index]['respostas']):
     btn = tk.Radiobutton(frame_perguntas, text=resposta, variable=var_resposta, value=i, justify="left", anchor="w", wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue")
-    btn.pack()
+    btn.pack(anchor="w", padx=10, pady=5)
     botoes_resposta.append(btn)
 
 # Botão para verificar a resposta
