@@ -99,14 +99,36 @@ perguntas = [
     },
     {
         'imagem': 'images/imagem3.png',
-        'pergunta': "2) Enquanto os portugueses escutavam a missa com muito 'prazer e devoção', a praia encheu-se de nativos. Eles sentavam-se lá surpresos com a complexidade do ritual que observavam ao longe. Quando D. Henrique acabou a pregação, os indígenas se ergueram e começaram a soprar conchas e buzinas, saltando e dançando (…) Náufragos Degredados e Traficantes (Eduardo Bueno). Este contato amistoso entre brancos e índios era preservado:",
+        'pergunta': "3)  A primeira capital do Brasil foi:                                                                   ",
         'respostas': [
-            'a) pela Igreja, que sempre respeitou a cultura indígena no decurso da catequese.',
-            'b) até o início da colonização quando o índio, vitimado por doenças, escravidão e extermínio, passou a ser descrito como sendo selvagem, indolente e canibal.',
-            'c) pelos colonos que escravizaram somente o africano na atividade produtiva de exportação.',
-            'd) em todos os períodos da História Colonial Brasileira, passando a figura do índio para o imaginário social como "o bom selvagem e forte colaborador da colonização".',
-            'e) sobretudo pelo governo colonial, que tomou várias medidas para impedir o genocídio e a escravidão.'],
+            'a) São Paulo',
+            'b) Rio de Janeiro',
+            'c) Salvador',
+            'd) São Luís',
+            'e) Brasília'],
         'resposta_correta': 2,
+    },
+    {
+        'imagem': 'images/imagem4.png',
+        'pergunta': "4) O descobrimento do Brasil foi parte do plano imperial da Coroa Portuguesa, no século XV. Embora não houvesse interesse específico de expansão para o Ocidente…",
+        'respostas': [
+            'a) a posse de terras no Atlântico ocidental consolidava a hegemonia portuguesa neste Oceano',
+            'b) o Brasil era uma alternativa mercantil ao comércio português no Oriente.',
+            'c) o desvio da esquadra de Cabral seguia a mesma inspiração de Colombo para chegar às Índias.',
+            'd) a procura de terras no Ocidente foi uma reação de Portugal ao Tratado de Tordesilhas, que o afastava da América.',
+            'e) essa descoberta foi mero acaso, provocado pelas intempéries que desviaram a esquadra da rota da Índia.'],
+        'resposta_correta': 0,
+    },
+    {
+        'imagem': 'images/imagem5.png',
+        'pergunta': "5) Qual foi a principal região do território brasileiro que os portugueses exploraram na fase Pré-colonial?",
+        'respostas': [
+            'a) A região da Floresta Amazônica, que possuía muitos animais selvagens.',
+            'b) A região do Centro-oeste brasileiro, que possuía muitas minas de ouro.',
+            'c) A região Sul do Brasil, pois não havia povos indígenas.',
+            'd) A faixa litorânea, principalmente do Nordeste e Sudeste do Brasil, que possuía muito pau-brasil.',
+            'e) Nenhuma das anteriores'],
+        'resposta_correta': 3,
     }
 ]
 
