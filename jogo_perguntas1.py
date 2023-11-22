@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import PhotoImage
+from tkinter import PhotoImage, messagebox
 from PIL import Image, ImageTk
 
 # Função para verificar a resposta selecionada
@@ -19,38 +19,61 @@ def exibir_mensagem_erro():
 def limpar_mensagem_erro():
     feedback_label.config(text="")
 
-# Função para avançar para a próxima pergunta
+# Função para avançar para a próxima pergunta ou mostrar botões de Sair/Salvar
 def avancar():
     global index
     if index < len(perguntas) - 1:
         index += 1
         mostrar_pergunta()
+    else:
+        mostrar_botao_sair_salvar()
+        # Se acertou a última pergunta, mostrar a mensagem
+        messagebox.showinfo("Parabéns!", "Você acertou todas as perguntas!")
 
 # Função para mostrar a pergunta atual
 def mostrar_pergunta():
-    pergunta = perguntas[index]
-    imagem_path = pergunta['imagem']
-    img = Image.open(imagem_path)
+    if index < len(perguntas):
+        pergunta = perguntas[index]
+        imagem_path = pergunta['imagem']
+        img = Image.open(imagem_path)
 
-    try:
-        # Se a versão do Pillow for 8.0.0 ou superior
-        img = img.resize((largura_imagem, altura_imagem), resample=Image.ANTIALIAS)
-    except AttributeError:
-        # Se a versão do Pillow for anterior a 8.0.0
         try:
-            img = img.resize((largura_imagem, altura_imagem), Image.ANTIALIAS)
-        except:
-            # Caso a exceção ocorra, tente com um método de redimensionamento padrão
-            img = img.resize((largura_imagem, altura_imagem))
+            # Se a versão do Pillow for 8.0.0 ou superior
+            img = img.resize((largura_imagem, altura_imagem), resample=Image.ANTIALIAS)
+        except AttributeError:
+            # Se a versão do Pillow for anterior a 8.0.0
+            try:
+                img = img.resize((largura_imagem, altura_imagem), Image.ANTIALIAS)
+            except:
+                # Caso a exceção ocorra, tente com um método de redimensionamento padrão
+                img = img.resize((largura_imagem, altura_imagem))
 
-    img = ImageTk.PhotoImage(img)
+        img = ImageTk.PhotoImage(img)
 
-    canvas_imagem.create_image(0, 0, anchor="nw", image=img)
-    canvas_imagem.image = img
+        canvas_imagem.create_image(0, 0, anchor="nw", image=img)
+        canvas_imagem.image = img
 
-    label_pergunta.config(text=pergunta['pergunta'])
-    for i, resposta in enumerate(pergunta['respostas']):
-        botoes_resposta[i].config(text=resposta, value=i)
+        label_pergunta.config(text=pergunta['pergunta'])
+        for i, resposta in enumerate(pergunta['respostas']):
+            botoes_resposta[i].config(text=resposta, value=i)
+    else:
+        mostrar_botao_sair_salvar()
+
+# Função para mostrar os botões "Sair" e "Salvar"
+def mostrar_botao_sair_salvar():
+    btn_sair.pack(side="top", pady=10)
+    btn_salvar.pack(side="top", pady=10)
+    # Desativar o botão de verificar resposta após a última pergunta
+    btn_verificar.config(state=tk.DISABLED)
+
+# Função para sair do jogo
+def sair_do_jogo():
+    root.destroy()
+
+# Função para salvar o jogo (a ser implementada)
+def salvar_jogo():
+    # Implemente a lógica de salvar o jogo aqui
+    pass
 
 # Criação da janela principal
 root = tk.Tk()
@@ -159,7 +182,11 @@ feedback_label.pack()
 
 # Botão para verificar a resposta
 btn_verificar = tk.Button(frame_perguntas, text="Verificar Resposta", command=lambda: verificar_resposta(perguntas[index]['resposta_correta']))
-btn_verificar.pack()
+btn_verificar.pack(side="top", pady=10)
+
+# Botões para Sair e Salvar
+btn_sair = tk.Button(frame_perguntas, text="Sair", command=sair_do_jogo)
+btn_salvar = tk.Button(frame_perguntas, text="Salvar", command=salvar_jogo)
 
 # Inicialização da primeira pergunta
 mostrar_pergunta()
