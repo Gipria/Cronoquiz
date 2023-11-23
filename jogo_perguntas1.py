@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import PhotoImage, messagebox
 from PIL import Image, ImageTk
 
+
 # Função para verificar a resposta selecionada
 def verificar_resposta(resposta_correta):
     resposta_selecionada = var_resposta.get()
@@ -10,14 +11,17 @@ def verificar_resposta(resposta_correta):
     else:
         exibir_mensagem_erro()
 
+
 # Função para exibir uma mensagem de erro
 def exibir_mensagem_erro():
     feedback_label.config(text="Resposta incorreta. Tente novamente.", fg="red")
     root.after(1000, limpar_mensagem_erro)
 
+
 # Função para limpar a mensagem de erro
 def limpar_mensagem_erro():
     feedback_label.config(text="")
+
 
 # Função para avançar para a próxima pergunta ou mostrar botões de Sair/Salvar
 def avancar():
@@ -26,9 +30,45 @@ def avancar():
         index += 1
         mostrar_pergunta()
     else:
-        mostrar_botao_sair_salvar()
-        # Se acertou a última pergunta, mostrar a mensagem
-        messagebox.showinfo("Parabéns!", "Você acertou todas as perguntas!")
+        mostrar_ultima_imagem()
+
+
+# Função para mostrar a última imagem
+def mostrar_ultima_imagem():
+    pergunta = perguntas[index]
+    imagem_path = pergunta.get('imagem', 'images/imagem_padrao.png')
+    img = Image.open(imagem_path)
+
+    try:
+        img = img.resize((largura_imagem, altura_imagem), resample=Image.ANTIALIAS)
+    except AttributeError:
+        try:
+            img = img.resize((largura_imagem, altura_imagem), Image.ANTIALIAS)
+        except:
+            img = img.resize((largura_imagem, altura_imagem))
+
+    img = ImageTk.PhotoImage(img)
+
+    canvas_imagem.create_image(0, 0, anchor="nw", image=img)
+    canvas_imagem.image = img
+
+    # Ocultar frame de perguntas
+    frame_perguntas.pack_forget()
+
+    # Mostrar botão "Voltar à Página Anterior"
+    btn_voltar.pack(side="top", pady=10)
+
+
+# Função para voltar à página anterior
+def voltar_pagina_anterior():
+    global index
+    # Mostrar frame de perguntas
+    frame_perguntas.pack(side="right", fill="both", expand=True)
+    btn_voltar.pack_forget()
+    # Voltar à página anterior
+    index -= 1
+    mostrar_pergunta()
+
 
 # Função para mostrar a pergunta atual
 def mostrar_pergunta():
@@ -38,14 +78,11 @@ def mostrar_pergunta():
         img = Image.open(imagem_path)
 
         try:
-            # Se a versão do Pillow for 8.0.0 ou superior
             img = img.resize((largura_imagem, altura_imagem), resample=Image.ANTIALIAS)
         except AttributeError:
-            # Se a versão do Pillow for anterior a 8.0.0
             try:
                 img = img.resize((largura_imagem, altura_imagem), Image.ANTIALIAS)
             except:
-                # Caso a exceção ocorra, tente com um método de redimensionamento padrão
                 img = img.resize((largura_imagem, altura_imagem))
 
         img = ImageTk.PhotoImage(img)
@@ -57,23 +94,19 @@ def mostrar_pergunta():
         for i, resposta in enumerate(pergunta['respostas']):
             botoes_resposta[i].config(text=resposta, value=i)
     else:
-        mostrar_botao_sair_salvar()
+        mostrar_ultima_imagem()
 
-# Função para mostrar os botões "Sair" e "Salvar"
-def mostrar_botao_sair_salvar():
-    btn_sair.pack(side="top", pady=10)
-    btn_salvar.pack(side="top", pady=10)
-    # Desativar o botão de verificar resposta após a última pergunta
-    btn_verificar.config(state=tk.DISABLED)
 
 # Função para sair do jogo
 def sair_do_jogo():
     root.destroy()
 
+
 # Função para salvar o jogo (a ser implementada)
 def salvar_jogo():
     # Implemente a lógica de salvar o jogo aqui
     pass
+
 
 # Criação da janela principal
 root = tk.Tk()
@@ -90,7 +123,7 @@ root.geometry(f"{largura_janela}x{altura_janela}")
 root.resizable(False, False)
 
 # Defina a largura da área de imagem para 70% da largura da janela
-largura_imagem = int(0.7 * largura_janela)
+largura_imagem = int(0.75 * largura_janela)
 altura_imagem = altura_janela
 
 # Crie um frame para as perguntas e respostas com um fundo colorido
@@ -102,11 +135,12 @@ perguntas = [
     {
         'imagem': 'images/imagem1.png',
         'pergunta': "1) A 'Carta de Pero Vaz de Caminha', escrita em 1500, é considerada como um dos documentos fundadores da Terra Brasilis e reflete, em seu texto, valores gerais da cultura renascentista, dentre os quais se destaca: a visão do índio como pertencente ao universo não religioso, tendo em conta sua antropofagia; a informação sobre os preconceitos desenvolvidos pelo renascimento no que tange à impossibilidade de se formar nos trópicos uma civilização católica e moderna; a identificação do Novo Mundo como uma área de insucesso devido à elevada temperatura que nada deixaria produzir; a observação da natureza e do homem do Novo Mundo como resultado da experiência da nova visão de homem, característica do século XV; a consideração da natureza e do homem como inferiores ao que foi projetado por Deus na Gênese",
-        'respostas': ['a) a visão do índio como pertencente ao universo não religioso, tendo em conta sua antropofagia;',
-                      'b) a informação sobre os preconceitos desenvolvidos pelo renascimento no que tange à impossibilidade de se formar nos trópicos uma civilização católica e moderna;',
-                      'c) a identificação do Novo Mundo como uma área de insucesso devido à elevada temperatura que nada deixaria produzir;',
-                      'd) a observação da natureza e do homem do Novo Mundo como resultado da experiência da nova visão de homem, característica do século XV;',
-                      'e) a consideração da natureza e do homem como inferiores ao que foi projetado por Deus na Gênese'],
+        'respostas': [
+            'a) a visão do índio como pertencente ao universo não religioso, tendo em conta sua antropofagia;',
+            'b) a informação sobre os preconceitos desenvolvidos pelo renascimento no que tange à impossibilidade de se formar nos trópicos uma civilização católica e moderna;',
+            'c) a identificação do Novo Mundo como uma área de insucesso devido à elevada temperatura que nada deixaria produzir;',
+            'd) a observação da natureza e do homem do Novo Mundo como resultado da experiência da nova visão de homem, característica do século XV;',
+            'e) a consideração da natureza e do homem como inferiores ao que foi projetado por Deus na Gênese'],
         'resposta_correta': 3,
     },
     {
@@ -152,6 +186,10 @@ perguntas = [
             'd) A faixa litorânea, principalmente do Nordeste e Sudeste do Brasil, que possuía muito pau-brasil.',
             'e) Nenhuma das anteriores'],
         'resposta_correta': 3,
+    },
+    {
+        'imagem': 'images/imagem6.png',
+
     }
 ]
 
@@ -163,7 +201,8 @@ canvas_imagem = tk.Canvas(root, width=largura_imagem, height=altura_imagem)
 canvas_imagem.pack(side="left", fill="both", expand=True)
 
 # Label para a pergunta
-label_pergunta = tk.Label(frame_perguntas, text=perguntas[index]['pergunta'], justify="left", anchor="w", wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue")
+label_pergunta = tk.Label(frame_perguntas, text=perguntas[index]['pergunta'], justify="left", anchor="w",
+                          wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue")
 label_pergunta.pack()
 
 # Variável para armazenar a resposta selecionada
@@ -172,21 +211,30 @@ var_resposta = tk.IntVar()
 # Botões de resposta
 botoes_resposta = []
 for i, resposta in enumerate(perguntas[index]['respostas']):
-    btn = tk.Radiobutton(frame_perguntas, text=resposta, variable=var_resposta, value=i, justify="left", anchor="w", wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue")
+    btn = tk.Radiobutton(frame_perguntas, text=resposta, variable=var_resposta, value=i, justify="left", anchor="w",
+                         wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue")
     btn.pack(anchor="w", padx=10, pady=5)
     botoes_resposta.append(btn)
 
 # Label para feedback
-feedback_label = tk.Label(frame_perguntas, text="", justify="left", anchor="w", wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue", fg="red")
+feedback_label = tk.Label(frame_perguntas, text="", justify="left", anchor="w",
+                          wraplength=largura_janela - largura_imagem, font=("Helvetica", 12), bg="lightblue", fg="red")
 feedback_label.pack()
 
 # Botão para verificar a resposta
-btn_verificar = tk.Button(frame_perguntas, text="Verificar Resposta", command=lambda: verificar_resposta(perguntas[index]['resposta_correta']))
+btn_verificar = tk.Button(frame_perguntas, text="Verificar Resposta",
+                          command=lambda: verificar_resposta(perguntas[index]['resposta_correta']))
 btn_verificar.pack(side="top", pady=10)
+
+# Botão para avançar para a próxima imagem
+btn_avancar = tk.Button(frame_perguntas, text="Avançar para a Próxima Imagem", command=avancar)
 
 # Botões para Sair e Salvar
 btn_sair = tk.Button(frame_perguntas, text="Sair", command=sair_do_jogo)
 btn_salvar = tk.Button(frame_perguntas, text="Salvar", command=salvar_jogo)
+
+# Botão para voltar à página anterior
+btn_voltar = tk.Button(frame_perguntas, text="Voltar à Página Anterior", command=voltar_pagina_anterior)
 
 # Inicialização da primeira pergunta
 mostrar_pergunta()
